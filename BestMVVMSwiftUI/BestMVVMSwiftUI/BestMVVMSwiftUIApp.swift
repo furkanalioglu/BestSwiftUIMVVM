@@ -11,7 +11,7 @@ import SwiftUI
 struct BestMVVMSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StandupsList(model: StandupsListModel())
         }
     }
 }
