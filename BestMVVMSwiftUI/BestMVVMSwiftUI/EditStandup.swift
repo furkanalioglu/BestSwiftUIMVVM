@@ -38,7 +38,8 @@ class EditStandupModel: ObservableObject {
         }
         //Unfortunately focus state can not be intended by the ObservableObject
         //But we did it with library
-        self.focus = .attendee(self.standup.attendees[indices.first!].id)
+        let index = min(indices.first!, self.standup.attendees.count - 1)
+        self.focus = .attendee(self.standup.attendees[index].id)
     }
     
     func addAttendee() {
