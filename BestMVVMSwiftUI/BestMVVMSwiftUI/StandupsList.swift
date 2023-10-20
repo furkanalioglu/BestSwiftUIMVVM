@@ -13,7 +13,7 @@ class StandupsListModel: ObservableObject {
     @Published var destination: Destination?
     
     enum Destination {
-        case add(Standup)
+        case add(EditStandupModel)
     }
     
     init(standups: [Standup] = [],
@@ -23,7 +23,7 @@ class StandupsListModel: ObservableObject {
     }
     
     func addStandupButtonTapped() {
-        self.destination = .add(Standup(id: Standup.ID(UUID())))
+        self.destination = .add(EditStandupModel(standup:Standup(id: Standup.ID(UUID()))))
     }
     
     func dismissAddStandupButtonTapped() {
@@ -33,8 +33,11 @@ class StandupsListModel: ObservableObject {
     func confirmAddStandupButtonTapped() {
         defer { self.destination = nil }
         
-        guard case var .add(standup) = self.destination
+        guard case let .add(editStandupModel) = self.destination
         else { return }
+        var standup = editStandupModel.standup
+        
+        print("We accessed standup with viewModel from subview \(standup)")
         
         standup.attendees.removeAll { attendee in
             attendee.name.allSatisfy(\.isWhitespace)
@@ -68,9 +71,9 @@ struct StandupsList: View {
             .sheet(
                 unwrapping: self.$model.destination,
                 case: CasePath(StandupsListModel.Destination.add))
-            { $standup in
+            { $model in
                 NavigationStack{
-                    EditStandupView(standup: $standup)
+                    EditStandupView(model: model)
                         .navigationTitle("Edit standup")
                         .toolbar{
                             ToolbarItem(placement: .cancellationAction) {
