@@ -15,6 +15,9 @@
 		9181B7BB2AE2ED72009CE948 /* Tagged in Frameworks */ = {isa = PBXBuildFile; productRef = 9181B7BA2AE2ED72009CE948 /* Tagged */; };
 		9181B7BD2AE2ED72009CE948 /* TaggedMoney in Frameworks */ = {isa = PBXBuildFile; productRef = 9181B7BC2AE2ED72009CE948 /* TaggedMoney */; };
 		9181B7BF2AE2ED72009CE948 /* TaggedTime in Frameworks */ = {isa = PBXBuildFile; productRef = 9181B7BE2AE2ED72009CE948 /* TaggedTime */; };
+		9181B7C22AE2F5A6009CE948 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 9181B7C12AE2F5A6009CE948 /* SwiftUINavigation */; };
+		9181B7C42AE2F5A6009CE948 /* SwiftUINavigationCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9181B7C32AE2F5A6009CE948 /* SwiftUINavigationCore */; };
+		9181B7C62AE2F884009CE948 /* EditStandup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7C52AE2F884009CE948 /* EditStandup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,7 @@
 		9181B7AD2AE2EAD2009CE948 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9181B7B02AE2EAD2009CE948 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9181B7B72AE2EBC8009CE948 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		9181B7C52AE2F884009CE948 /* EditStandup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStandup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,7 +35,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9181B7C22AE2F5A6009CE948 /* SwiftUINavigation in Frameworks */,
 				9181B7BB2AE2ED72009CE948 /* Tagged in Frameworks */,
+				9181B7C42AE2F5A6009CE948 /* SwiftUINavigationCore in Frameworks */,
 				9181B7BD2AE2ED72009CE948 /* TaggedMoney in Frameworks */,
 				9181B7BF2AE2ED72009CE948 /* TaggedTime in Frameworks */,
 			);
@@ -60,8 +66,9 @@
 			isa = PBXGroup;
 			children = (
 				9181B7A92AE2EAD0009CE948 /* BestMVVMSwiftUIApp.swift */,
-				9181B7AB2AE2EAD0009CE948 /* StandupsList.swift */,
+				9181B7C52AE2F884009CE948 /* EditStandup.swift */,
 				9181B7B72AE2EBC8009CE948 /* Models.swift */,
+				9181B7AB2AE2EAD0009CE948 /* StandupsList.swift */,
 				9181B7AD2AE2EAD2009CE948 /* Assets.xcassets */,
 				9181B7AF2AE2EAD2009CE948 /* Preview Content */,
 			);
@@ -96,6 +103,8 @@
 				9181B7BA2AE2ED72009CE948 /* Tagged */,
 				9181B7BC2AE2ED72009CE948 /* TaggedMoney */,
 				9181B7BE2AE2ED72009CE948 /* TaggedTime */,
+				9181B7C12AE2F5A6009CE948 /* SwiftUINavigation */,
+				9181B7C32AE2F5A6009CE948 /* SwiftUINavigationCore */,
 			);
 			productName = BestMVVMSwiftUI;
 			productReference = 9181B7A62AE2EAD0009CE948 /* BestMVVMSwiftUI.app */;
@@ -127,6 +136,7 @@
 			mainGroup = 9181B79D2AE2EAD0009CE948;
 			packageReferences = (
 				9181B7B92AE2ED72009CE948 /* XCRemoteSwiftPackageReference "swift-tagged" */,
+				9181B7C02AE2F5A6009CE948 /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
 			);
 			productRefGroup = 9181B7A72AE2EAD0009CE948 /* Products */;
 			projectDirPath = "";
@@ -155,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9181B7B82AE2EBC8009CE948 /* Models.swift in Sources */,
+				9181B7C62AE2F884009CE948 /* EditStandup.swift in Sources */,
 				9181B7AC2AE2EAD0009CE948 /* StandupsList.swift in Sources */,
 				9181B7AA2AE2EAD0009CE948 /* BestMVVMSwiftUIApp.swift in Sources */,
 			);
@@ -374,6 +385,14 @@
 				minimumVersion = 0.10.0;
 			};
 		};
+		9181B7C02AE2F5A6009CE948 /* XCRemoteSwiftPackageReference "swiftui-navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swiftui-navigation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -391,6 +410,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9181B7B92AE2ED72009CE948 /* XCRemoteSwiftPackageReference "swift-tagged" */;
 			productName = TaggedTime;
+		};
+		9181B7C12AE2F5A6009CE948 /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9181B7C02AE2F5A6009CE948 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
+			productName = SwiftUINavigation;
+		};
+		9181B7C32AE2F5A6009CE948 /* SwiftUINavigationCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9181B7C02AE2F5A6009CE948 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
+			productName = SwiftUINavigationCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
