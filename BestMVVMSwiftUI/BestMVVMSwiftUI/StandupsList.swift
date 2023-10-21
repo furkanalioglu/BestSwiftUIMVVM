@@ -14,6 +14,7 @@ class StandupsListModel: ObservableObject {
     
     enum Destination {
         case add(EditStandupModel)
+        case detail(StandupDetailModel)
     }
     
     init(standups: [Standup] = [],
@@ -48,6 +49,10 @@ class StandupsListModel: ObservableObject {
         }
         self.standups.append(standup)
     }
+    
+    func standupTapped(standup : Standup) {
+        self.destination = .detail(StandupDetailModel(standup: standup))
+    }
 }
 
 struct StandupsList: View {
@@ -56,8 +61,12 @@ struct StandupsList: View {
         NavigationStack{
             List{
                 ForEach(self.model.standups) { standup in
-                    CardView(standup: standup)
-                        .listRowBackground(standup.theme.mainColor)
+                    Button{
+                        self.model.standupTapped(standup:standup)
+                    }label:{
+                        CardView(standup: standup)
+                    }
+                    .listRowBackground(standup.theme.mainColor)
                 }
             }
             .toolbar{
@@ -89,15 +98,26 @@ struct StandupsList: View {
                             }
                         }
                 }
+            }.navigationDestination(unwrapping: self.$model.destination,
+                                    case: CasePath(StandupsListModel.Destination.detail))
+            { $detailModel in
+                StandupDetail(model: detailModel)
             }
         }
     }
 }
 
 #Preview {
-    NavigationStack{
-        StandupsList(model: StandupsListModel(standups: [.mock]))
-    }
+    StandupsList(
+        model: StandupsListModel(
+            standups: [.mock],
+            destination: .add(EditStandupModel(
+                standup: .mock,
+                focus: .attendee(
+                    Standup.mock.attendees[1].id))
+            )
+        )
+    )
 }
 
 struct CardView: View {

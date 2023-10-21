@@ -20,6 +20,7 @@
 		9181B7C62AE2F884009CE948 /* EditStandup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7C52AE2F884009CE948 /* EditStandup.swift */; };
 		9181B7D52AE30EFC009CE948 /* BestMVVMSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7D42AE30EFC009CE948 /* BestMVVMSwiftUITests.swift */; };
 		9181B7DC2AE30F2A009CE948 /* EditStandupsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7DB2AE30F2A009CE948 /* EditStandupsTest.swift */; };
+		9181B7DE2AE3B6AE009CE948 /* StandupDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7DD2AE3B6AE009CE948 /* StandupDetail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		9181B7D22AE30EFC009CE948 /* BestMVVMSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMVVMSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9181B7D42AE30EFC009CE948 /* BestMVVMSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestMVVMSwiftUITests.swift; sourceTree = "<group>"; };
 		9181B7DB2AE30F2A009CE948 /* EditStandupsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStandupsTest.swift; sourceTree = "<group>"; };
+		9181B7DD2AE3B6AE009CE948 /* StandupDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandupDetail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				9181B7C52AE2F884009CE948 /* EditStandup.swift */,
 				9181B7B72AE2EBC8009CE948 /* Models.swift */,
 				9181B7AB2AE2EAD0009CE948 /* StandupsList.swift */,
+				9181B7DD2AE3B6AE009CE948 /* StandupDetail.swift */,
 				9181B7AD2AE2EAD2009CE948 /* Assets.xcassets */,
 				9181B7AF2AE2EAD2009CE948 /* Preview Content */,
 			);
@@ -230,6 +233,7 @@
 				9181B7B82AE2EBC8009CE948 /* Models.swift in Sources */,
 				9181B7C62AE2F884009CE948 /* EditStandup.swift in Sources */,
 				9181B7AC2AE2EAD0009CE948 /* StandupsList.swift in Sources */,
+				9181B7DE2AE3B6AE009CE948 /* StandupDetail.swift in Sources */,
 				9181B7AA2AE2EAD0009CE948 /* BestMVVMSwiftUIApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
