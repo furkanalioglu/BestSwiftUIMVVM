@@ -7,35 +7,103 @@
 
 import Foundation
 import SwiftUI
+import SwiftUINavigation
 import XCTestDynamicOverlay
 
 
 final
 class RecordMeetingModel: ObservableObject {
-    let standup: Standup
     
+    let standup: Standup
     //in order to fix white screen bug on dismiss
     //we need to connect this with environment
     @Published var dismiss = false
     @Published var secondsElapsed = 0
     @Published var speakerIndex = 0
+    @Published var destionation : Destination?
+    
+    enum Destination {
+        case alert(AlertState<AlertAction>)
+    }
+    
+    enum AlertAction {
+        case confirmSave
+        case confirmDiscard
+    }
     
     var onMeetingFinished: () -> Void = unimplemented("RecordMeetingModel.onMeetingFinished")
+    
+    var isAlertOpen : Bool {
+        switch destionation {
+        case .alert:
+            return true
+        case .none:
+            return false
+        }
+    }
     
     var durationRemaining: Duration {
         self.standup.duration - .seconds(self.secondsElapsed)
     }
     
-    init(standup: Standup) {
+    init(standup: Standup,
+         destination: Destination? = nil
+    ) {
         self.standup = standup
+        self.destionation = destination
     }
     
     
     func nextButtonTapped() {
+        guard self.speakerIndex < self.standup.attendees.count - 1
+        else {
+//            self.onMeetingFinished()
+//            self.dismiss = true
+            self.destionation = .alert(
+                AlertState(
+                    title: 
+                        TextState("End meeting?"),
+                    message:
+                        TextState("You are leaving early what you would like to do"),
+                    buttons: [
+                        .default(TextState("Save"),
+                                 action: .send(.confirmSave)),
+                        .cancel(TextState("Resume"))
+                    ]
+            ))
+            return
+        }
         
+        self.speakerIndex  += 1
+        self.secondsElapsed = self.speakerIndex * Int(self.standup.durationPerAttendee.components.seconds)
     }
     
     func endMettingButtonTapped() {
+        self.destionation = .alert(
+        AlertState(
+            title: TextState("End meeting?"),
+            message: TextState("You are leaving early what you would like to do"),
+            buttons: [
+                .default(TextState("Save"),
+                         action: .send(.confirmSave)),
+                .destructive(TextState("Discard"),
+                         action: .send(.confirmDiscard)),
+                .cancel(TextState("Resume"))
+            
+            ])
+        )
+    }
+    
+    func alertButtonTapped(_ action: AlertAction) {
+        switch action{
+        case .confirmDiscard:
+            self.onMeetingFinished()
+            self.dismiss = true
+            break
+        case .confirmSave:
+            self.dismiss = true
+            break
+        }
         
     }
     
@@ -44,6 +112,7 @@ class RecordMeetingModel: ObservableObject {
         do{
             while true{
                 try await Task.sleep(for: .seconds(1))
+                guard !self.isAlertOpen else { return }
                 self.secondsElapsed += 1
                 
                 if self.secondsElapsed.isMultiple(
@@ -100,6 +169,13 @@ struct RecordMeetingView: View {
         .onChange(of: self.model.dismiss) { self.dismiss()}
         .navigationBarBackButtonHidden(true)
         .task { await self.model.task() }
+        .alert(
+            unwrapping: self.$model.destionation,
+            case: /RecordMeetingModel.Destination.alert)
+        { action  in
+            guard let action else { return }
+            self.model.alertButtonTapped(action)
+        }
     }
 }
 
@@ -298,4 +374,8 @@ struct MeetingFooterView: View {
       of \(self.standup.attendees.count)
       """
     }
+}
+
+extension AlertState where Action == RecordMeetingModel.AlertAction{
+    
 }

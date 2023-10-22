@@ -83,7 +83,8 @@ class StandupDetailModel : ObservableObject {
         case let .record(recordMeetingModel):
             recordMeetingModel.onMeetingFinished = { [weak self] in
                 guard let self else { return }
-                self.destination = nil
+                //since there is a swiftui bug do not uncomment it
+//                self.destination = nil
             }
             break
         case .alert, .edit, .meeting, .none:
@@ -184,7 +185,8 @@ struct StandupDetail : View {
         { $recordMeeting in
             RecordMeetingView(model: recordMeeting)
                 .id("123123")
-        }
+        }                .interactiveDismissDisabled()
+
         .alert(unwrapping: self.$model.destination,
                case:  CasePath(
                 StandupDetailModel.Destination.alert),
