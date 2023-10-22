@@ -82,9 +82,20 @@ class StandupDetailModel : ObservableObject {
     func bind() {
         switch self.destination{
         case let .record(recordMeetingModel):
-            recordMeetingModel.onMeetingFinished = { [weak self] in
+            recordMeetingModel.onMeetingFinished = { [weak self] transcript in
                 guard let self else { return }
-                //since there is a swiftui bug do not uncomment it
+                
+                Task{
+                    try? await Task.sleep(for: .milliseconds(100))
+                    withAnimation{
+                    //since there is a swiftui bug do not uncomment it
+                    _ = self.standup.meetings.insert(
+                        Meeting(id: Meeting.ID(UUID()),
+                                date: Date(),
+                                transcript: transcript),
+                        at: 0)
+                    }
+                }
 //                self.destination = nil
             }
             break

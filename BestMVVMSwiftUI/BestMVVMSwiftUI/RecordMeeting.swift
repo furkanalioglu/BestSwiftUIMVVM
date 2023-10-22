@@ -24,6 +24,8 @@ class RecordMeetingModel: ObservableObject {
     @Published var speakerIndex = 0
     @Published var destionation : Destination?
     
+    private var transcript = ""
+    
     enum Destination {
         case alert(AlertState<AlertAction>)
     }
@@ -33,7 +35,7 @@ class RecordMeetingModel: ObservableObject {
         case confirmDiscard
     }
     
-    var onMeetingFinished: () -> Void = unimplemented("RecordMeetingModel.onMeetingFinished")
+    var onMeetingFinished: (String) -> Void = unimplemented("RecordMeetingModel.onMeetingFinished")
     
     var isAlertOpen : Bool {
         switch destionation {
@@ -99,7 +101,7 @@ class RecordMeetingModel: ObservableObject {
     func alertButtonTapped(_ action: AlertAction) {
         switch action{
         case .confirmDiscard:
-            self.onMeetingFinished()
+            self.onMeetingFinished(self.transcript)
             self.dismiss = true
             break
         case .confirmSave:
@@ -109,20 +111,20 @@ class RecordMeetingModel: ObservableObject {
         
     }
     
-    @MainActor func task() async {
-        
+    func task() async {
         do {
             try await withThrowingTaskGroup(of: Void.self) { group in
                 if await self.requestAuth() == .authorized {
                     group.addTask{
-                        try await  self.startSpeechRecognition()
+                        try await self.startSpeechRecognition()
                     }
-                    
                     group.addTask{
+                        print("Task started timer")
                         try await self.startTimer()
+    
                     }
-                    
                     try await group.waitForAll()
+                    print("task fired both")
                 }
             }
         }catch {
@@ -152,7 +154,7 @@ class RecordMeetingModel: ObservableObject {
                 
                 if speakerIndex == self.standup.attendees.count - 1 {
                     self.dismiss = true
-                    self.onMeetingFinished()
+                    self.onMeetingFinished(self.transcript)
                     break
                 }
                 self.speakerIndex += 1
@@ -164,11 +166,9 @@ class RecordMeetingModel: ObservableObject {
     func startSpeechRecognition() async throws {
         let speech = Speech()
         for try await result in await speech.startTask(request: SFSpeechAudioBufferRecognitionRequest()) {
-            print(result.bestTranscription.formattedString)
+            self.transcript = result.bestTranscription.formattedString
         }
     }
-    
-    
 }
 
 struct RecordMeetingView: View {
