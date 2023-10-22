@@ -11,7 +11,21 @@ import SwiftUI
 struct BestMVVMSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            StandupsList(model: StandupsListModel())
+            var standup = Standup.mock
+            let _ = standup.duration = .seconds(6)
+            StandupsList(
+                model: StandupsListModel(
+                    destination: .detail(
+                        StandupDetailModel(
+                            destination: .record(
+                                RecordMeetingModel(
+                                    standup: standup)
+                            ),
+                            standup: standup
+                        )
+                    )
+                )
+            )
         }
     }
 }

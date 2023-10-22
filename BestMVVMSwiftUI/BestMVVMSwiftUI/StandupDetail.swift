@@ -24,7 +24,9 @@ class StandupDetailModel : ObservableObject {
         case confirmDeletion
     }
     
-    @Published var destination: Destination?
+    @Published var destination: Destination?{
+        didSet{ self.bind() }
+    }
     @Published var standup: Standup
     
     var onConfirmDeletion: () -> Void = unimplemented("StandupDetailModel.onConfirmDeletion")
@@ -33,6 +35,7 @@ class StandupDetailModel : ObservableObject {
          standup: Standup) {
         self.destination = destination
         self.standup = standup
+        self.bind()
     }
     
     func deleteMeeting(atOffsets indices: IndexSet) {
@@ -73,11 +76,24 @@ class StandupDetailModel : ObservableObject {
     func startMeetingButtonTapped() {
         self.destination = .record(RecordMeetingModel(standup: self.standup))
     }
+    
+    private
+    func bind() {
+        switch self.destination{
+        case let .record(recordMeetingModel):
+            recordMeetingModel.onMeetingFinished = { [weak self] in
+                guard let self else { return }
+                self.destination = nil
+            }
+            break
+        case .alert, .edit, .meeting, .none:
+            break
+        }
+    }
 }
 
 struct StandupDetail : View {
     @ObservedObject var model: StandupDetailModel
-    
     var body: some View {
         List {
             Section {
@@ -167,6 +183,7 @@ struct StandupDetail : View {
                 StandupDetailModel.Destination.record))
         { $recordMeeting in
             RecordMeetingView(model: recordMeeting)
+                .id("123123")
         }
         .alert(unwrapping: self.$model.destination,
                case:  CasePath(
@@ -198,6 +215,7 @@ struct StandupDetail : View {
                     }
             }
         }
+
     }
 }
 
