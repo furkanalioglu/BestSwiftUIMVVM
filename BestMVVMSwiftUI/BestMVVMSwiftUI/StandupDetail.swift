@@ -8,12 +8,15 @@
 import Foundation
 import SwiftUI
 import SwiftUINavigation
+import XCTestDynamicOverlay
+
 
 final
 class StandupDetailModel : ObservableObject {
     enum Destination {
         case alert(AlertState<AlertAction>)
         case meeting(Meeting)
+        case edit(EditStandupModel)
     }
     
     enum AlertAction {
@@ -22,6 +25,8 @@ class StandupDetailModel : ObservableObject {
     
     @Published var destination: Destination?
     @Published var standup: Standup
+    
+    var onConfirmDeletion: () -> Void = unimplemented("StandupDetailModel.onConfirmDeletion")
     
     init(destination: Destination? = nil ,
          standup: Standup) {
@@ -42,7 +47,26 @@ class StandupDetailModel : ObservableObject {
     }
     
     func alertButtonTapped(_ action: AlertAction ){
-        print("asd")
+        switch action{
+        case .confirmDeletion:
+            self.onConfirmDeletion()
+        }
+    }
+    
+    func editButtonTapped() {
+        self.destination = .edit(EditStandupModel(standup: self.standup))
+    }
+    
+    func cancelEditButtonTapped() {
+        self.destination = nil
+    }
+    
+    func doneEditButtonTapped() {
+        guard case let .edit(model) = self.destination
+        else { return }
+        
+        self.standup = model.standup
+        self.destination = nil
     }
 }
 
@@ -121,11 +145,13 @@ struct StandupDetail : View {
         .navigationTitle(self.model.standup.title)
         .toolbar {
             Button("Edit") {
+                self.model.editButtonTapped()
             }
         }
-        .navigationDestination(unwrapping: self.$model.destination,
-                               case: CasePath(
-                                StandupDetailModel.Destination.meeting))
+        .navigationDestination(
+            unwrapping: self.$model.destination,
+            case: CasePath(
+                StandupDetailModel.Destination.meeting))
         { $meeting in
             MeetingView(meeting: meeting, standup: self.model.standup)
         }
@@ -137,8 +163,28 @@ struct StandupDetail : View {
                 self.model.alertButtonTapped(actualAction)
             }
         })
-        
-
+        .sheet(
+            unwrapping: self.$model.destination,
+            case: CasePath(
+                StandupDetailModel.Destination.edit))
+        { $editmodel in
+            NavigationStack {
+                EditStandupView(model: editmodel)
+                    .navigationTitle(self.model.standup.title)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel"){
+                                self.model.cancelEditButtonTapped()
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done"){
+                                self.model.doneEditButtonTapped()
+                            }
+                        }
+                    }
+            }
+        }
     }
 }
 

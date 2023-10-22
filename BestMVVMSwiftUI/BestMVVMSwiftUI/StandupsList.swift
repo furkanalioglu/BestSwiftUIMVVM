@@ -11,6 +11,7 @@ final
 class StandupsListModel: ObservableObject {
     @Published var standups : [Standup]
     @Published var destination: Destination?
+    { didSet { self.bind() } }
     
     enum Destination {
         case add(EditStandupModel)
@@ -21,6 +22,7 @@ class StandupsListModel: ObservableObject {
          destination : Destination? = nil) {
         self.standups = standups
         self.destination = destination
+        self.bind()
     }
     
     func addStandupButtonTapped() {
@@ -52,6 +54,27 @@ class StandupsListModel: ObservableObject {
     
     func standupTapped(standup : Standup) {
         self.destination = .detail(StandupDetailModel(standup: standup))
+    }
+    
+    private
+    func bind() {
+        switch self.destination {
+        case .detail(let standupDetailModel):
+            standupDetailModel.onConfirmDeletion = {
+                [weak self, id = standupDetailModel.standup.id] in
+                guard let self else { return }
+                
+                withAnimation {
+                    //NOT THE BEST WAY
+                    self.standups.removeAll {$0.id == id}
+                    self.destination = nil
+                }
+            }
+            break
+            
+        case .add, .none:
+            break
+        }
     }
 }
 
