@@ -6,12 +6,15 @@
 //
 import SwiftUINavigation
 import SwiftUI
+import Combine
 
 final
 class StandupsListModel: ObservableObject {
     @Published var standups : [Standup]
     @Published var destination: Destination?
     { didSet { self.bind() } }
+    
+    private var destinationCancellable : AnyCancellable?
     
     enum Destination {
         case add(EditStandupModel)
@@ -39,9 +42,7 @@ class StandupsListModel: ObservableObject {
         guard case let .add(editStandupModel) = self.destination
         else { return }
         var standup = editStandupModel.standup
-        
-        print("We accessed standup with viewModel from subview \(standup)")
-        
+                
         standup.attendees.removeAll { attendee in
             attendee.name.allSatisfy(\.isWhitespace)
         }
@@ -69,6 +70,14 @@ class StandupsListModel: ObservableObject {
                     self.standups.removeAll {$0.id == id}
                     self.destination = nil
                 }
+            }
+            
+            self.destinationCancellable = standupDetailModel.$standup
+                .sink { [weak self] standup in
+                    guard let self else { return }
+                    guard let index = self.standups.firstIndex(where: {$0.id == standup.id})
+                    else { return }
+                self.standups[index] = standup
             }
             break
             
