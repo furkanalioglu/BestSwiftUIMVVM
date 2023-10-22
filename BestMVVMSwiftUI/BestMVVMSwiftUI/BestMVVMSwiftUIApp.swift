@@ -24,7 +24,7 @@ struct BestMVVMSwiftUIApp: App {
 //                            standup: standup
 //                        )
 //                    )
-                    standups: [standup]
+//                    standups: [standup]
                 )
             )
         }

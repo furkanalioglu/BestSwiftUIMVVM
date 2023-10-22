@@ -17,16 +17,37 @@ class StandupsListModel: ObservableObject {
     { didSet { self.bind() } }
     
     private var destinationCancellable : AnyCancellable?
+    private var cancellables : Set<AnyCancellable> = []
+
     
     enum Destination {
         case add(EditStandupModel)
         case detail(StandupDetailModel)
     }
     
-    init(standups: IdentifiedArrayOf<Standup> = [],
-         destination : Destination? = nil) {
-        self.standups = standups
+    init(destination : Destination? = nil) {
         self.destination = destination
+        self.standups = []
+        
+        do{
+            self.standups = try JSONDecoder().decode(
+                IdentifiedArray.self,
+                from: Data(contentsOf: .standups))
+        }catch{
+            //TODO: Handle errors
+        }
+        
+        self.$standups
+            .dropFirst()
+            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
+            .sink { standups in
+            do{
+                try JSONEncoder().encode(standups).write(to: .standups)
+            }catch{
+                //TODO: Handle errors
+            }
+        }.store(in: &cancellables)
+        
         self.bind()
     }
     
@@ -138,18 +159,18 @@ struct StandupsList: View {
     }
 }
 
-#Preview {
-    StandupsList(
-        model: StandupsListModel(
-            standups: [.mock],
-            destination: .add(EditStandupModel(
-                standup: .mock,
-                focus: .attendee(
-                    Standup.mock.attendees[1].id))
-            )
-        )
-    )
-}
+//#Preview {
+//    StandupsList(
+//        model: StandupsListModel(
+//            standups: [.mock],
+//            destination: .add(EditStandupModel(
+//                standup: .mock,
+//                focus: .attendee(
+//                    Standup.mock.attendees[1].id))
+//            )
+//        )
+//    )
+//}
 
 struct CardView: View {
     let standup: Standup
@@ -170,4 +191,8 @@ struct CardView: View {
         .padding()
         .foregroundColor(self.standup.theme.accentColor)
     }
+}
+
+extension URL {
+    static let standups =  Self.documentsDirectory.appending(component: "standups.json")
 }
