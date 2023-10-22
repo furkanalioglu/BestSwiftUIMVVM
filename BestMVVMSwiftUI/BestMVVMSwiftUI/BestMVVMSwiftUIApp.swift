@@ -15,15 +15,16 @@ struct BestMVVMSwiftUIApp: App {
             let _ = standup.duration = .seconds(6)
             StandupsList(
                 model: StandupsListModel(
-                    destination: .detail(
-                        StandupDetailModel(
-                            destination: .record(
-                                RecordMeetingModel(
-                                    standup: standup)
-                            ),
-                            standup: standup
-                        )
-                    )
+//                    destination: .detail(
+//                        StandupDetailModel(
+//                            destination: .record(
+//                                RecordMeetingModel(
+//                                    standup: standup)
+//                            ),
+//                            standup: standup
+//                        )
+//                    )
+                    standups: [standup]
                 )
             )
         }

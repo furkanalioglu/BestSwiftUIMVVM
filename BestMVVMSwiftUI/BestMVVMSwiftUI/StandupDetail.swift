@@ -11,6 +11,7 @@ import SwiftUINavigation
 import XCTestDynamicOverlay
 
 
+@MainActor
 final
 class StandupDetailModel : ObservableObject {
     enum Destination {

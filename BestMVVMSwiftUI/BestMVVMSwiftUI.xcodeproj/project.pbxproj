@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		91302F762AE56FC80099C6A8 /* SpeechRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91302F752AE56FC80099C6A8 /* SpeechRecognition.swift */; };
 		9181B7AA2AE2EAD0009CE948 /* BestMVVMSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7A92AE2EAD0009CE948 /* BestMVVMSwiftUIApp.swift */; };
 		9181B7AC2AE2EAD0009CE948 /* StandupsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7AB2AE2EAD0009CE948 /* StandupsList.swift */; };
 		9181B7AE2AE2EAD2009CE948 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9181B7AD2AE2EAD2009CE948 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		91302F752AE56FC80099C6A8 /* SpeechRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognition.swift; sourceTree = "<group>"; };
 		9181B7A62AE2EAD0009CE948 /* BestMVVMSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestMVVMSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9181B7A92AE2EAD0009CE948 /* BestMVVMSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestMVVMSwiftUIApp.swift; sourceTree = "<group>"; };
 		9181B7AB2AE2EAD0009CE948 /* StandupsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandupsList.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				9181B80E2AE52A2F009CE948 /* RecordMeeting.swift */,
 				9181B7AD2AE2EAD2009CE948 /* Assets.xcassets */,
 				9181B7AF2AE2EAD2009CE948 /* Preview Content */,
+				91302F752AE56FC80099C6A8 /* SpeechRecognition.swift */,
 			);
 			path = BestMVVMSwiftUI;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				9181B7AC2AE2EAD0009CE948 /* StandupsList.swift in Sources */,
 				9181B7DE2AE3B6AE009CE948 /* StandupDetail.swift in Sources */,
 				9181B80F2AE52A2F009CE948 /* RecordMeeting.swift in Sources */,
+				91302F762AE56FC80099C6A8 /* SpeechRecognition.swift in Sources */,
 				9181B7AA2AE2EAD0009CE948 /* BestMVVMSwiftUIApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,6 +402,7 @@
 				DEVELOPMENT_TEAM = G853KP8PLG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -427,6 +432,7 @@
 				DEVELOPMENT_TEAM = G853KP8PLG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

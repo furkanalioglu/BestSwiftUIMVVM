@@ -9,8 +9,10 @@ import Foundation
 import SwiftUI
 import SwiftUINavigation
 import XCTestDynamicOverlay
+@preconcurrency import Speech
 
 
+@MainActor
 final
 class RecordMeetingModel: ObservableObject {
     
@@ -57,11 +59,11 @@ class RecordMeetingModel: ObservableObject {
     func nextButtonTapped() {
         guard self.speakerIndex < self.standup.attendees.count - 1
         else {
-//            self.onMeetingFinished()
-//            self.dismiss = true
+            //            self.onMeetingFinished()
+            //            self.dismiss = true
             self.destionation = .alert(
                 AlertState(
-                    title: 
+                    title:
                         TextState("End meeting?"),
                     message:
                         TextState("You are leaving early what you would like to do"),
@@ -70,7 +72,7 @@ class RecordMeetingModel: ObservableObject {
                                  action: .send(.confirmSave)),
                         .cancel(TextState("Resume"))
                     ]
-            ))
+                ))
             return
         }
         
@@ -80,17 +82,17 @@ class RecordMeetingModel: ObservableObject {
     
     func endMettingButtonTapped() {
         self.destionation = .alert(
-        AlertState(
-            title: TextState("End meeting?"),
-            message: TextState("You are leaving early what you would like to do"),
-            buttons: [
-                .default(TextState("Save"),
-                         action: .send(.confirmSave)),
-                .destructive(TextState("Discard"),
-                         action: .send(.confirmDiscard)),
-                .cancel(TextState("Resume"))
-            
-            ])
+            AlertState(
+                title: TextState("End meeting?"),
+                message: TextState("You are leaving early what you would like to do"),
+                buttons: [
+                    .default(TextState("Save"),
+                             action: .send(.confirmSave)),
+                    .destructive(TextState("Discard"),
+                                 action: .send(.confirmDiscard)),
+                    .cancel(TextState("Resume"))
+                    
+                ])
         )
     }
     
@@ -108,26 +110,65 @@ class RecordMeetingModel: ObservableObject {
     }
     
     @MainActor func task() async {
-        defer { self.dismiss = true }
-        do{
-            while true{
-                try await Task.sleep(for: .seconds(1))
-                guard !self.isAlertOpen else { return }
-                self.secondsElapsed += 1
-                
-                if self.secondsElapsed.isMultiple(
-                    of: Int(self.standup.durationPerAttendee.components.seconds)){
-                    
-                    if speakerIndex == self.standup.attendees.count - 1 {
-                        self.dismiss = true
-                        self.onMeetingFinished()
-                        break
+        
+        do {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                if await self.requestAuth() == .authorized {
+                    group.addTask{
+                        try await  self.startSpeechRecognition()
                     }
-                    self.speakerIndex += 1
+                    
+                    group.addTask{
+                        try await self.startTimer()
+                    }
+                    
+                    try await group.waitForAll()
                 }
             }
-        }catch {}
+        }catch {
+            self.destionation = .alert(AlertState(
+                title: TextState("Something went wrong")))
+        }
     }
+    
+    private
+    func requestAuth() async -> SFSpeechRecognizerAuthorizationStatus {
+        await withUnsafeContinuation { continuation in
+            SFSpeechRecognizer.requestAuthorization { status in
+                continuation.resume(returning: status)
+            }
+        }
+    }
+    
+    private
+    func startTimer() async throws {
+        while true{
+            try await Task.sleep(for: .seconds(1))
+            guard !self.isAlertOpen else { continue }
+            self.secondsElapsed += 1
+            
+            if self.secondsElapsed.isMultiple(
+                of: Int(self.standup.durationPerAttendee.components.seconds)){
+                
+                if speakerIndex == self.standup.attendees.count - 1 {
+                    self.dismiss = true
+                    self.onMeetingFinished()
+                    break
+                }
+                self.speakerIndex += 1
+            }
+        }
+    }
+    
+    private
+    func startSpeechRecognition() async throws {
+        let speech = Speech()
+        for try await result in await speech.startTask(request: SFSpeechAudioBufferRecognitionRequest()) {
+            print(result.bestTranscription.formattedString)
+        }
+    }
+    
+    
 }
 
 struct RecordMeetingView: View {

@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 import IdentifiedCollections
 
+@MainActor
 final
 class StandupsListModel: ObservableObject {
     @Published var standups : IdentifiedArrayOf<Standup>
