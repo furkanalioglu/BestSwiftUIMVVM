@@ -21,6 +21,7 @@
 		9181B7D52AE30EFC009CE948 /* BestMVVMSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7D42AE30EFC009CE948 /* BestMVVMSwiftUITests.swift */; };
 		9181B7DC2AE30F2A009CE948 /* EditStandupsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7DB2AE30F2A009CE948 /* EditStandupsTest.swift */; };
 		9181B7DE2AE3B6AE009CE948 /* StandupDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9181B7DD2AE3B6AE009CE948 /* StandupDetail.swift */; };
+		9181B80D2AE525B2009CE948 /* IdentifiedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 9181B80C2AE525B2009CE948 /* IdentifiedCollections */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 				9181B7C22AE2F5A6009CE948 /* SwiftUINavigation in Frameworks */,
 				9181B7BB2AE2ED72009CE948 /* Tagged in Frameworks */,
 				9181B7C42AE2F5A6009CE948 /* SwiftUINavigationCore in Frameworks */,
+				9181B80D2AE525B2009CE948 /* IdentifiedCollections in Frameworks */,
 				9181B7BD2AE2ED72009CE948 /* TaggedMoney in Frameworks */,
 				9181B7BF2AE2ED72009CE948 /* TaggedTime in Frameworks */,
 			);
@@ -141,6 +143,7 @@
 				9181B7BE2AE2ED72009CE948 /* TaggedTime */,
 				9181B7C12AE2F5A6009CE948 /* SwiftUINavigation */,
 				9181B7C32AE2F5A6009CE948 /* SwiftUINavigationCore */,
+				9181B80C2AE525B2009CE948 /* IdentifiedCollections */,
 			);
 			productName = BestMVVMSwiftUI;
 			productReference = 9181B7A62AE2EAD0009CE948 /* BestMVVMSwiftUI.app */;
@@ -195,6 +198,7 @@
 			packageReferences = (
 				9181B7B92AE2ED72009CE948 /* XCRemoteSwiftPackageReference "swift-tagged" */,
 				9181B7C02AE2F5A6009CE948 /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
+				9181B80B2AE525B2009CE948 /* XCRemoteSwiftPackageReference "swift-identified-collections" */,
 			);
 			productRefGroup = 9181B7A72AE2EAD0009CE948 /* Products */;
 			projectDirPath = "";
@@ -522,6 +526,14 @@
 				minimumVersion = 1.0.2;
 			};
 		};
+		9181B80B2AE525B2009CE948 /* XCRemoteSwiftPackageReference "swift-identified-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-identified-collections";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -549,6 +561,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9181B7C02AE2F5A6009CE948 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
 			productName = SwiftUINavigationCore;
+		};
+		9181B80C2AE525B2009CE948 /* IdentifiedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9181B80B2AE525B2009CE948 /* XCRemoteSwiftPackageReference "swift-identified-collections" */;
+			productName = IdentifiedCollections;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

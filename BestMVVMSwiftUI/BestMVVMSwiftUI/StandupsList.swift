@@ -7,10 +7,11 @@
 import SwiftUINavigation
 import SwiftUI
 import Combine
+import IdentifiedCollections
 
 final
 class StandupsListModel: ObservableObject {
-    @Published var standups : [Standup]
+    @Published var standups : IdentifiedArrayOf<Standup>
     @Published var destination: Destination?
     { didSet { self.bind() } }
     
@@ -21,7 +22,7 @@ class StandupsListModel: ObservableObject {
         case detail(StandupDetailModel)
     }
     
-    init(standups: [Standup] = [],
+    init(standups: IdentifiedArrayOf<Standup> = [],
          destination : Destination? = nil) {
         self.standups = standups
         self.destination = destination
@@ -66,8 +67,7 @@ class StandupsListModel: ObservableObject {
                 guard let self else { return }
                 
                 withAnimation {
-                    //NOT THE BEST WAY
-                    self.standups.removeAll {$0.id == id}
+                    self.standups.remove(id: id)
                     self.destination = nil
                 }
             }
@@ -75,9 +75,7 @@ class StandupsListModel: ObservableObject {
             self.destinationCancellable = standupDetailModel.$standup
                 .sink { [weak self] standup in
                     guard let self else { return }
-                    guard let index = self.standups.firstIndex(where: {$0.id == standup.id})
-                    else { return }
-                self.standups[index] = standup
+                self.standups[id:standup.id] = standup
             }
             break
             
